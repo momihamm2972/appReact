@@ -85,6 +85,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TaskItem from '../../components/TaskItem';
 
 interface Task {
   id: string;
@@ -132,13 +133,17 @@ export default function HomeScreen() {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
+  // const renderItem = ({ item }: { item: Task }) => (
+  //   <View style={styles.taskItem}>
+  //     <Text style={styles.taskText}>{item.text}</Text>
+  //     <TouchableOpacity onPress={() => deleteTask(item.id)}>
+  //       <Text style={styles.delete}>✕</Text>
+  //     </TouchableOpacity>
+  //   </View>
+  // );
+
   const renderItem = ({ item }: { item: Task }) => (
-    <View style={styles.taskItem}>
-      <Text style={styles.taskText}>{item.text}</Text>
-      <TouchableOpacity onPress={() => deleteTask(item.id)}>
-        <Text style={styles.delete}>✕</Text>
-      </TouchableOpacity>
-    </View>
+    <TaskItem task={item} onDelete={deleteTask} />
   );
 
   return (
