@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import TaskItem from '../../components/TaskItem';
 import { LinearGradient } from 'expo-linear-gradient';
 
-interface Task {
+type Task =  {
   id: string;
   text: string;
   done?: boolean;
@@ -20,10 +20,6 @@ interface Task {
 export default function HomeScreen() {
   const [task, setTask] = useState<string>('');
   const [tasks, setTasks] = useState<Task[]>([]);
-
-  // const [fontsLoaded] = useFonts({
-  //   Pacifico_400Regular,
-  // });
 
   useEffect(() => {
     loadTasks();
@@ -34,7 +30,7 @@ export default function HomeScreen() {
     if (firstTime.current === false)
       saveTasks();
     else
-      firstTime.current = false; 
+      firstTime.current = false;
   }, [tasks]);
 
   const loadTasks = async () => {
@@ -56,7 +52,11 @@ export default function HomeScreen() {
 
   const addTask = () => {
     if (task.trim()) {
-      const newTask: Task = { id: Date.now().toString(), text: task, done: false };
+      const newTask: Task = {
+        id: Date.now().toString(),
+        text: task,
+        done: false
+      };
       setTasks([...tasks, newTask]);
       setTask('');
     }
@@ -75,15 +75,13 @@ export default function HomeScreen() {
   };
 
   const renderItem = ({ item }: { item: Task }) => (
-    <TaskItem task={item} onDelete={deleteTask} onToggleDone={toggleDone} />
+    <TaskItem task={item} onDelete={deleteTask} onToggleDone={() => toggleDone(item.id)} />
   );
 
-  // if (!fontsLoaded) return null;
 
   return (
     <LinearGradient
-      // colors={['#a8edea', '#fed6e3']} // Mint to pink-blue gradient
-      colors={['#A8FFEB', '#0099FF']} // mint to blue
+      colors={['#A8FFEB', '#0099FF']} 
       style={styles.container}
     >
       <Text style={[styles.title, { fontFamily: 'Pacifico_400Regular' }]}>Tasks To Do</Text>
