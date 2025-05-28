@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TaskItem from '../../components/TaskItem';
-import { useFonts } from 'expo-font';
-import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface Task {
@@ -23,16 +21,20 @@ export default function HomeScreen() {
   const [task, setTask] = useState<string>('');
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [fontsLoaded] = useFonts({
-    Pacifico_400Regular,
-  });
+  // const [fontsLoaded] = useFonts({
+  //   Pacifico_400Regular,
+  // });
 
   useEffect(() => {
     loadTasks();
   }, []);
 
+  const firstTime = useRef(true)
   useEffect(() => {
-    saveTasks();
+    if (firstTime.current === false)
+      saveTasks();
+    else
+      firstTime.current = false; 
   }, [tasks]);
 
   const loadTasks = async () => {
@@ -76,7 +78,7 @@ export default function HomeScreen() {
     <TaskItem task={item} onDelete={deleteTask} onToggleDone={toggleDone} />
   );
 
-  if (!fontsLoaded) return null;
+  // if (!fontsLoaded) return null;
 
   return (
     <LinearGradient
@@ -95,7 +97,7 @@ export default function HomeScreen() {
         <Button title="Add" onPress={addTask} />
       </View>
       <FlatList
-        data={tasks}
+        data={tasks || []}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
       />
