@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import TaskItem from '../../components/TaskItem';
+import { LinearGradient } from 'expo-linear-gradient'; 
 import {
   View,
   Text,
@@ -7,9 +10,6 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import TaskItem from '../../components/TaskItem';
-import { LinearGradient } from 'expo-linear-gradient';
 
 type Task =  {
   id: string;
