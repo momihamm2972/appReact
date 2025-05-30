@@ -16,6 +16,7 @@ interface Props {
   task: Task;
   onDelete: (id: string) => void;
   onToggleDone: (id: string) => void;
+  // onToggleDone: (id: string) => void;
 }
 
 export default function TaskItem({ task, onDelete, onToggleDone }: Props) {
