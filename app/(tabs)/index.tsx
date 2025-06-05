@@ -1,3 +1,5 @@
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store';
 import React, { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TaskItem from '../../components/TaskItem';
@@ -17,7 +19,7 @@ type Task =  {
   done?: boolean;
 }
 
-export default function HomeScreen() {
+function HomeScreen() {
   const [task, setTask] = useState<string>('');
   const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -25,12 +27,13 @@ export default function HomeScreen() {
     loadTasks();
   }, []);
 
-  const firstTime = useRef(true)
+  const firstTime = useRef(true);
   useEffect(() => {
-    if (firstTime.current === false)
+    if (firstTime.current === false) {
       saveTasks();
-    else
+    } else {
       firstTime.current = false;
+    }
   }, [tasks]);
 
   const loadTasks = async () => {
@@ -55,7 +58,7 @@ export default function HomeScreen() {
       const newTask: Task = {
         id: Date.now().toString(),
         text: task,
-        done: false
+        done: false,
       };
       setTasks([...tasks, newTask]);
       setTask('');
@@ -77,7 +80,6 @@ export default function HomeScreen() {
   const renderItem = ({ item }: { item: Task }) => (
     <TaskItem task={item} onDelete={deleteTask} onToggleDone={() => toggleDone(item.id)} />
   );
-
 
   return (
     <LinearGradient
@@ -129,3 +131,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <HomeScreen />
+    </Provider>
+  );
+}
+
+
+
+
+
+
+// import { useSelector, useDispatch } from 'react-redux';
+// import { RootState } from '../store';
+// import { addTask, deleteTask, toggleDone } from '../tasksSlice';
+
+// const dispatch = useDispatch();
+// const tasks = useSelector((state: RootState) => state.tasks.list);
